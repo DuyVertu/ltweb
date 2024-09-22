@@ -9,6 +9,7 @@ import java.util.List;
 import ltweb.configs.DBConnectMySQL;
 import ltweb.dao.IUserDao;
 import ltweb.models.UserModel;
+import ltweb.utils.DBUtils;
 
 public class UserDaoImpl extends DBConnectMySQL implements IUserDao {
 
@@ -21,8 +22,7 @@ public class UserDaoImpl extends DBConnectMySQL implements IUserDao {
 		String sql = "SELECT * FROM users ";
 		List<UserModel> list = new ArrayList<UserModel>();
 		try {
-			new DBConnectMySQL();
-			conn = DBConnectMySQL.getConnection();
+			conn = new DBConnectMySQL().getConnection();
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery();
 			while (rs.next()) {
@@ -49,8 +49,7 @@ public class UserDaoImpl extends DBConnectMySQL implements IUserDao {
 	public UserModel findById(int id) {
 		String sql = "SELECT * FROM users WHERE id = ? ";
 		try {
-			new DBConnectMySQL();
-			conn = DBConnectMySQL.getConnection();
+			conn = new DBConnectMySQL().getConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, id);
 			rs = ps.executeQuery();
@@ -104,8 +103,7 @@ String sql = "INSERT INTO users(id, username, email, password, images, fullname,
 	public UserModel findByUserName(String username) {
 		String sql = "SELECT * FROM users WHERE username = ? ";
 		try {
-			new DBConnectMySQL();
-			conn = DBConnectMySQL.getConnection();
+			conn = new DBConnectMySQL().getConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, username);
 			rs = ps.executeQuery();
@@ -137,6 +135,35 @@ String sql = "INSERT INTO users(id, username, email, password, images, fullname,
 			e.printStackTrace();
 		}
 
+	}
+
+	public boolean checkExistEmail(String email) {
+        String query = "SELECT * FROM users WHERE email = ?";
+        try {
+            UserModel user = DBUtils.queryForSingleResult(query, UserModel.class, email);
+            return user != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkExistUsername(String username) {
+        String query = "SELECT * FROM users WHERE username = ?";
+        try {
+            UserModel user = DBUtils.queryForSingleResult(query, UserModel.class, username);
+            return user != null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+	@Override
+	public boolean checkExistPhone(String phone) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
