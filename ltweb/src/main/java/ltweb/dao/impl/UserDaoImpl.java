@@ -165,5 +165,13 @@ String sql = "INSERT INTO users(id, username, email, password, images, fullname,
 		// TODO Auto-generated method stub
 		return false;
 	}
+	public void updatePassword(UserModel user) {
+	    String query = "UPDATE users SET password = ? WHERE username = ?";
+	    try {
+	        DBUtils.update(query, user.getPassword(), user.getUsername());
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
 
 }

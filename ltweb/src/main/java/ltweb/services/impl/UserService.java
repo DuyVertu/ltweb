@@ -63,4 +63,9 @@ public class UserService implements IUserService {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	@Override
+	public void updatePassword(UserModel user) {
+	    userDao.updatePassword(user); // Giả sử bạn có phương thức này trong UserDao
+	}
+
 }
